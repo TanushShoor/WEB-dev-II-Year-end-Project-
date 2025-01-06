@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        body{
+            height: 100%;
+            margin: 0;
+            color: aliceblue;
+    
+            font-family: 'Marker Felt', fantasy;
+
+            background: radial-gradient(circle, #cc1e3b, #e15f13,rgb(255, 250, 113));
+            background-size: 400% 400%;
+            animation: gradientAnimation 10s ease infinite;
+        }
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+
+        .intro{
+            font-size: xxx-large;
+        }
+        .enter{
+            font-size: xx-large;
+        }
+        #input{
+            width: 205px;
+            font-family: 'Marker Felt', fantasy;
+            font-size: large;
+        }
+        #btn {
+            font-family: 'Marker Felt', fantasy;
+            font-size: large;
+            cursor: pointer;
+        }
+        
+        #result{
+            font-size: xx-large;
+            text-align: center;
+            padding:5%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="intro">
+            <p>Hi Welcome to Age Calculator</p>
+        </div>
+    
+        <div class="enter">
+            <p>Please enter your date of birth below : -</p>
+        </div>
+    
+        <div class="btn1">
+            <input id="input" type="date">
+            <button type="submit" id="btn">Submit</button>
+        </div>
+    
+        <div id ="result">
+            <p id="age"></p>
+        </div>
+    </div>
+    
+
+    <script>
+        const UserInput = document.querySelector('input');
+
+        //to make the entry till present date only
+        UserInput.max = new Date().toISOString().split("T")[0];
+
+        let result = document.querySelector('#age');
+        
+        const button = document.querySelector('#btn');
+        button.addEventListener('click',function(){
+
+            let DOB = new Date(UserInput.value);
+            let birthDate = DOB.getDate();
+            let birthMonth = DOB.getMonth() +1 ;
+            let birthYear = DOB.getFullYear();
+
+            let today = new Date();
+            let todayDate = today.getDate();
+            let todayMonth = today.getMonth()+1 ;
+            let todayYear = today.getFullYear();
+
+            let diffYear = todayYear - birthYear;
+            console.log(diffYear);
+
+            let diffMonth
+            if(todayMonth>= birthMonth){
+                diffMonth = todayMonth - birthMonth;
+                // console.log(diffMonth)
+            }
+            else {
+                diffYear--;
+                diffMonth = todayMonth + 12 - birthMonth;
+                // console.log(diffMonth);
+            }
+
+
+            let diffDays
+            if(todayDate >= birthDate){
+                diffDays = todayDate - birthDate;
+            }
+            else{
+                diffMonth--;
+                diffDays = getDaysInMonth(birthYear, birthMonth) - birthDate + todayDate ;
+            }
+             
+
+            if(diffMonth <0){
+                diffMonth = 12 + diffMonth;
+                diffYear--;
+            }
+
+            console.log(diffDays, diffMonth, diffYear)
+            const dayName = DOB.toLocaleDateString('en-US', { weekday: 'long' });
+
+            result.innerHTML = `Congratulations! You are ${diffYear} years, ${diffMonth} months and ${diffDays}  days old. <br> The day you were born was ${dayName}.`;
+
+        })
+
+        function getDaysInMonth(year , month){
+            return new Date(year, month, 0).getDate();
+        }
+
+
+
+    </script>
+</body>
+</html>
